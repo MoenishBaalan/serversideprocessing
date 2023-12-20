@@ -7,22 +7,23 @@ To design a website to perform mathematical calculations in server side.
 
 ### Step 1:
 
-clone the repository from GitHub
+Desing your website for calculation using wireframe work
 
 ### Step 2:
 
-Create Django admin project.
+Then to execute the wireframe work desing use html,cs
 
 ### Step 3:
 
-Create New App.
+Then to execute the wireframe work desing use html,cs
 
 ### Step 4:
 
-create python programes for views and urls.
+Mention the path of the website in urls.py
 
 ### Step 5:
-create a Html file of forms.
+
+Publish the website in the given URL
 
 
 ### Step 6:
@@ -30,141 +31,122 @@ create a Html file of forms.
 Publish the website in the given URL.
 
 ## PROGRAM :
-```
-perimeter.html
-
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <title>PERIMETER OF RECTANGLE</title>
-        <style>
-        form {
-  width: 500px;
-  margin: 0 auto;
-  background-color : rgb(126, 78, 138);
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 20px;
+## math.html
+```html 
+<html>
+<head>
+<meta charset='utf-8'>
+<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+<title>Area of Prism</title>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<style type="text/css">
+body 
+{
+background-color:cyan;
 }
-
-label {
-  display: block;
-  font-size: 16px;
-  font-weight: bold;
-  margin-bottom: 10px;
+.edge {
+width: 1080px;
+margin-left: auto;
+margin-right: auto;
+padding-top: 200px;
+padding-left: 300px;
 }
-
-input[type="text"],
-input[type="number"] {
-  width: 100%;
-  padding: 12px 20px;
-  margin-bottom: 20px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: vertical;
+.box {
+    display:block;
+border: Thick dashed lime;
+width: 500px;
+min-height: 300px;
+font-size: 20px;
+background-color: purple;
 }
-
-input[type="submit"] {
-  background-color: #4CAF50;
-  color: white;
-  padding: 12px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  float: right;
+.formelt{
+color: Red;
+text-align: center;
+margin-top: 5px;
+margin-bottom: 5px;
 }
-
-input[type="submit"]:hover {
-  background-color: #7c1053;
+h1
+{
+    color: yellow;
+text-align: center;
+padding-top: 20px;
 }
-
-.container {
-  border-radius: 5px;
-  background-color: #f2f2f2;
-  padding: 20px;
-}
-
-.perimeter {
-  margin-bottom: 20px;
-  color: black;
-  font-size: 20px;
-  font-weight: bold;
-}
-h1 {
-  text-align: center;
-  font-size: 24px;
-  color: purple;
-}
-body {
-    background-color:rgb(41, 2, 2);
-}
-
 </style>
-    </head>
-            <body>
-                <h1> PERIMETER OF RECTANGLE </h1>
-                 <form method="POST" action="/perimeter/">
-                    {%csrf_token%}	
-		 <label for="length">Enter Length</label>
-         <input type="text" name="length" id="length" value="{{ length }}"/> <br>			
-          <label for="width">Enter Width</label>
-         <input type="width" name="width" id="width" value="{{ width }}"/><br>
-          <input type="submit" value="Calculate Perimeter"/><br>
-
-          <label for="perimeter">Perimeter</label>
-         <input type="perimeter" name="perimeter" id="perimeter" value="{{ perimeter }}"/><br>
-	</form>
-
-            </body>
-        
-    
-</html>
-
-views.py
-
+</head>
+<body>
+    <div class="edge">
+    <div class="box">
+    <h1>Area of a Prism</h1>
+    <form method="POST">
+    {% csrf_token %}
+    <div class="formelt">
+    Length : <input type="text" name="side" value="{{s}}"></input>(in m)<br/>
+    </div>
+    <div class="formelt">
+    Breadth : <input type="text" name="height" value="{{h}}"></input>(in m)<br/>
+    </div>
+    <div class="formelt">
+    <input type="submit" value="Calculate"></input><br/>
+    </div>
+    <div class="formelt">
+        Area : <input type="text" name="area" value="{{area}}"></input>m<sup>2</sup><br/>
+    </div>
+    </form>
+    </div>
+    </div>
+</body>
+</html>        
+```
+## views.py
+```py
 from django.shortcuts import render
-def perimeter(request):
-    context = {}
-    context['length']="0"
-    context['width']="0"
-    context['perimeter']="0"
+from django.template  import loader
+from django.shortcuts import render
+# Create your views here.
 
+
+
+
+def prismarea(request):
+    context={}
+    context['area'] = "0"
+    context['s'] = "0"
+    context['h'] = "0"
     if request.method == 'POST':
-        print("POST METHOD IS USED")
-        length=request.POST.get("length",0)
-        width=request.POST.get("width",0)
-        print('Length=',length)
+        print("POST method is used")
+        s = request.POST.get('side','0')
+        h = request.POST.get('height','0')
+        print('request=',request)
+        print('side=',s)
+        print('height=',h)
+        area = 2*int(s) * int(s)+4*int(s)*int(h)
+        context['area'] = area
+        context['s'] = s
+        context['h'] = h
+        print('Area=',area)
+    return render(request,'myapp/math.html',context)
 
-        print('Width=',width)
-
-        length_num = int(length)
-        width_num = int(width)
-        perimeter=2*(length_num+width_num)
-        context['length']=length
-        context['width']=width
-        context['perimeter']=perimeter
-        print('Perimeter=',perimeter)
-    return render(request,"myapp/perimeter.html",context)
-
-    urls.py
-
-    from django.contrib import admin
+```
+## urls.py
+```py
+from django.contrib import admin
 from django.urls import path
 from myapp import views
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('perimeter/',views.perimeter,name="perimeter"),
+    
+    path('areaofprism/',views.prismarea,name="areaofprism"),
 ]
 ```
-
 ## OUTPUT:
-![server1](https://github.com/MoenishBaalan/serversideprocessing/assets/147473396/f2637b0a-5dcc-4feb-b85d-8b33b0fc77ce)
+
+![284829130-64673793-2898-4670-afb5-0fe1aa7b38a4](https://github.com/MoenishBaalan/serversideprocessing/assets/147473396/21e7fc12-3354-4e8e-aa10-99ed87af2f8a)
 
 
 ### Home Page:
-![server2](https://github.com/MoenishBaalan/serversideprocessing/assets/147473396/bf90d93f-4170-487c-8778-1506b22eba6e)
+
+![284830517-855033bc-de76-4e77-8917-01ac9254de83](https://github.com/MoenishBaalan/serversideprocessing/assets/147473396/4f68952d-f996-477e-a420-9bdd578af245)
+
 
 ## Result:
-The programe for impiementing server side processing is completed successfully.
+the program is executed succssfully
